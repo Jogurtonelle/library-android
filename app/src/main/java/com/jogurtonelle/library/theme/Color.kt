@@ -1,4 +1,4 @@
-package com.jogurtonelle.library.ui.theme
+package com.jogurtonelle.library.theme
 
 import androidx.compose.ui.graphics.Color
 

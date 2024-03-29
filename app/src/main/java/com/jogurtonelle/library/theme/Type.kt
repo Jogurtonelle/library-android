@@ -1,10 +1,17 @@
-package com.jogurtonelle.library.ui.theme
+package com.jogurtonelle.library.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.jogurtonelle.library.R
+
+//add font
+val Oswald = FontFamily(
+    Font(R.font.oswald_medium, FontWeight.Medium),
+)
 
 // Set of Material typography styles to start with
 val Typography = Typography(
