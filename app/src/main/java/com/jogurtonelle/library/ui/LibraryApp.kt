@@ -18,27 +18,37 @@ fun LibraryApp(
     navController: NavHostController = rememberNavController()
 ) {
     val libraryUiState by libraryViewModel.uiState.collectAsState()
-    
+
     NavHost(
         navController = navController,
-        startDestination = "home"
+        startDestination = LibraryScreen.HOME.name
     ) {
-        composable("home") {
+        composable(LibraryScreen.HOME.name) {
             HomeScreen(
+                libraryUiState = libraryUiState,
                 onLibraryTextFieldValueChange = { libraryViewModel.onQueryChanged(it) },
                 libraryTextFieldValue = libraryViewModel._searchQuery,
                 onBookClicked = {
-                    libraryUiState.selectedBookId = it
+                    libraryViewModel.selectBook(it)
                     libraryViewModel.onQueryChanged("")
-                    navController.navigate("book")
-                }
+                    navController.navigate(LibraryScreen.BOOK.name)
+                },
+                onBarcodeDismissRequest = { libraryViewModel.hideBarcodeSheet() },
+                onYourCardClick = { libraryViewModel.showBarcodeSheet() },
+                onSearchBarFocusChange = { libraryViewModel.onSearchBarFocusChange(it) },
+                searchBarFocused = libraryViewModel._searchBarFocused,
+                prevSearches = libraryUiState.prevSearches
             )
         }
-        composable("book") {
+        composable(LibraryScreen.BOOK.name) {
             BookScreen(
                 bookId = libraryUiState.selectedBookId ?: 0,
                 onBack = { navController.popBackStack() }
             )
         }
     }
+}
+
+enum class LibraryScreen {
+    HOME, BOOK
 }

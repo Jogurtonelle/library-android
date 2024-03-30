@@ -1,6 +1,7 @@
 package com.jogurtonelle.library.ui.book
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -28,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jogurtonelle.library.data.Data
 import com.jogurtonelle.library.model.BookStatus
@@ -44,7 +47,7 @@ fun BookScreen(
     val libraryBranches = availableCopies.map { it.libraryBranchId }.distinct().sorted()
 
     Scaffold (
-
+        containerColor = MaterialTheme.colorScheme.surface
     ){
         paddingValues ->
         LazyColumn (
@@ -88,7 +91,10 @@ fun BookScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 8.dp, end = 8.dp, bottom = 4.dp),
-                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 ) {
                     Text(
                         text = branchName,
@@ -96,8 +102,7 @@ fun BookScreen(
                         modifier = Modifier
                             .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
                         fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        textAlign = TextAlign.Center
                     )
                 }
 
@@ -106,24 +111,32 @@ fun BookScreen(
                     Card (
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
+                            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
                     ){
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ){
                             Column(
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
                             ){
-                                Row {
+                                Row (
+                                    verticalAlignment = Alignment.CenterVertically
+                                ){
                                     Text(
                                         text = "Rok publikacji:  ",
+                                        style = MaterialTheme.typography.bodyMedium,
                                         modifier = Modifier
                                             .padding(
                                                 start = 16.dp,
                                                 top = 4.dp,
                                                 bottom = 4.dp
-                                            )
+                                            ),
+                                        color = if (available == "Dostępna") MaterialTheme.colorScheme.onTertiaryContainer else Color.Gray
                                     )
                                     Text(
                                         text = item.yearOfPublication.toString(),
@@ -135,18 +148,22 @@ fun BookScreen(
                                                 top = 4.dp,
                                                 bottom = 4.dp
                                             ),
-                                        color = if (available == "Dostępna") MaterialTheme.colorScheme.onSurface else Color.Gray
+                                        color = if (available == "Dostępna") MaterialTheme.colorScheme.onTertiaryContainer else Color.Gray
                                     )
                                 }
-                                Row {
+                                Row (
+                                    verticalAlignment = Alignment.Bottom
+                                ){
                                     Text(
                                         text = "Dostępność:  ",
+                                        style = MaterialTheme.typography.bodyMedium,
                                         modifier = Modifier
                                             .padding(
                                                 start = 16.dp,
                                                 top = 4.dp,
                                                 bottom = 8.dp
-                                            )
+                                            ),
+                                        color = if (available == "Dostępna") MaterialTheme.colorScheme.onTertiaryContainer else Color.Gray
                                     )
                                     Text(
                                         text = available,
@@ -158,7 +175,7 @@ fun BookScreen(
                                                 top = 4.dp,
                                                 bottom = 8.dp
                                             ),
-                                        color = if (available == "Dostępna") MaterialTheme.colorScheme.onSurface else Color.Gray
+                                        color = if (available == "Dostępna") MaterialTheme.colorScheme.onTertiaryContainer else Color.Gray
                                     )
                                 }
                             }
@@ -170,6 +187,10 @@ fun BookScreen(
                                     .padding(end = 12.dp),
                                 shape = CardDefaults.shape,
                                 enabled = (available == "Dostępna"),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (available == "Dostępna") MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                                    contentColor = MaterialTheme.colorScheme.onPrimary
+                                )
                             ) {
                                 if (available == "Dostępna") {
                                     Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "Zarezerwuj")
@@ -184,8 +205,6 @@ fun BookScreen(
                 }
                 Spacer(modifier = Modifier.padding(4.dp))
             }
-
-
         }
     }
 }

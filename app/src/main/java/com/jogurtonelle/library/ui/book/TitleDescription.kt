@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jogurtonelle.library.model.Book
 
@@ -36,7 +37,11 @@ fun TitleDescription(
                     descriptionCallToAction =
                         if (linesToShow == 4) "rozwiń opis" else "zwiń opis"
                 }
-            )
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
     ) {
         Card(
             modifier = Modifier
@@ -45,7 +50,10 @@ fun TitleDescription(
                     enabled = false,
                     onClick = {}
                 ),
-            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondaryContainer)
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         ) {
             Text(
                 text = book.title,
@@ -85,4 +93,13 @@ fun TitleDescription(
             textAlign = TextAlign.End
         )
     }
+}
+
+@Preview
+@Composable
+fun BookScreenPreview(){
+    BookScreen(
+        bookId = 1,
+        onBack = {}
+    )
 }

@@ -4,6 +4,7 @@ import com.jogurtonelle.library.R
 import com.jogurtonelle.library.model.Book
 import com.jogurtonelle.library.model.BookItem
 import com.jogurtonelle.library.model.BookStatus
+import com.jogurtonelle.library.model.User
 
 object Data{
     val books : List<Book> = listOf(
@@ -140,5 +141,12 @@ object Data{
             yearOfPublication = 1960,
             dateOfReturn = null
         )
+    )
+
+    val user = User(
+        id = 12345678910,
+        name = "John Doe",
+        email = "",
+        password = ""
     )
 }
