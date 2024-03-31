@@ -1,7 +1,6 @@
 package com.jogurtonelle.library.ui.viewModel
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -13,8 +12,10 @@ class LibraryViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(LibraryUiState())
     val uiState  = _uiState.asStateFlow()
 
+    /** The current query for the search bar */
     var _searchQuery: String by mutableStateOf("")
         private set
+    //TODO??
     var _searchBarFocused : Boolean by mutableStateOf(false)
         private set
 
@@ -22,27 +23,23 @@ class LibraryViewModel : ViewModel() {
         _searchQuery = query
     }
 
+    //Book selection
     fun selectBook(bookId: Int) {
-        _uiState.value.selectedBookId = bookId
+        _uiState.value.selectedBookTitleId = bookId
     }
 
     fun resetSelectedBook() {
-        _uiState.value.selectedBookId = null
+        _uiState.value.selectedBookTitleId = null
     }
 
-    fun showBarcodeSheet() {
+    fun changeBarcodeSheetVisibility(isVisible: Boolean) {
         _uiState.update {
-            it.copy(showBarcodeBottomSheet = true)}
+            it.copy(showQrCodeBottomSheet = isVisible)}
     }
 
-    fun hideBarcodeSheet() {
-        _uiState.update { uiState ->
-            uiState.copy(showBarcodeBottomSheet = false)}
-    }
-
-    fun onSearchBarFocusChange(focused: Boolean) {
-        _searchBarFocused = focused
-        if (!focused){
+    fun onSearchBarFocusChange(isFocused: Boolean) {
+        _searchBarFocused = isFocused
+        if (!isFocused){
             _searchQuery = ""
         }
     }

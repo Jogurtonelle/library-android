@@ -16,7 +16,7 @@ import com.jogurtonelle.library.ui.viewModel.LibraryViewModel
 fun LibraryApp(
     libraryViewModel: LibraryViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
-) {
+){
     val libraryUiState by libraryViewModel.uiState.collectAsState()
 
     NavHost(
@@ -26,23 +26,24 @@ fun LibraryApp(
         composable(LibraryScreen.HOME.name) {
             HomeScreen(
                 libraryUiState = libraryUiState,
-                onLibraryTextFieldValueChange = { libraryViewModel.onQueryChanged(it) },
-                libraryTextFieldValue = libraryViewModel._searchQuery,
+                onLibrarySearchBarValueChange = { libraryViewModel.onQueryChanged(it) },
+                librarySearchBarValue = libraryViewModel._searchQuery,
                 onBookClicked = {
                     libraryViewModel.selectBook(it)
                     libraryViewModel.onQueryChanged("")
                     navController.navigate(LibraryScreen.BOOK.name)
                 },
-                onBarcodeDismissRequest = { libraryViewModel.hideBarcodeSheet() },
-                onYourCardClick = { libraryViewModel.showBarcodeSheet() },
+                onBarcodeDismissRequest = { libraryViewModel.changeBarcodeSheetVisibility(false) },
+                onYourCardClick = { libraryViewModel.changeBarcodeSheetVisibility(true) },
                 onSearchBarFocusChange = { libraryViewModel.onSearchBarFocusChange(it) },
                 searchBarFocused = libraryViewModel._searchBarFocused,
                 prevSearches = libraryUiState.prevSearches
             )
         }
+
         composable(LibraryScreen.BOOK.name) {
             BookScreen(
-                bookId = libraryUiState.selectedBookId ?: 0,
+                bookTitleId = libraryUiState.selectedBookTitleId ?: 0,
                 onBack = { navController.popBackStack() }
             )
         }

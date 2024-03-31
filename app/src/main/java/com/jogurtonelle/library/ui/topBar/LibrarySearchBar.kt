@@ -32,7 +32,7 @@ import com.jogurtonelle.library.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarCollapsed(
+fun LibrarySearchBar(
     query : String,
     onQueryChange : (String) -> Unit,
     onSearch : (String) -> Unit,

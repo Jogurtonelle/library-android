@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -16,15 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jogurtonelle.library.model.Book
+import com.jogurtonelle.library.model.BookTitle
 
 @Composable
-fun TitleDescription(
-    book: Book
+fun TitleAndDescription(
+    book: BookTitle
 ){
-    var linesToShow by remember { mutableStateOf(4) }
+    var linesToShow by remember { mutableIntStateOf(4) }
     var descriptionCallToAction by remember { mutableStateOf("rozwiń opis") }
 
     Card(
@@ -46,7 +46,7 @@ fun TitleDescription(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(
+                .clickable( //added to make title not clickable
                     enabled = false,
                     onClick = {}
                 ),
@@ -93,13 +93,4 @@ fun TitleDescription(
             textAlign = TextAlign.End
         )
     }
-}
-
-@Preview
-@Composable
-fun BookScreenPreview(){
-    BookScreen(
-        bookId = 1,
-        onBack = {}
-    )
 }

@@ -1,4 +1,4 @@
-package com.jogurtonelle.library.ui.barcodeScreen
+package com.jogurtonelle.library.ui.qrCodeSheet
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,15 +23,14 @@ import com.lightspark.composeqr.QrCodeView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CodeDrawer(
+fun QrCodeBottomSheet(
     onDismissRequest: () -> Unit,
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
     ){
         Box{
-            Column (
-            ){
+            Column{
                 Text(
                     text = "Twoja karta biblioteczna",
                     modifier = Modifier.padding(start = 24.dp, end = 16.dp),

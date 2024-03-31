@@ -2,7 +2,7 @@ package com.jogurtonelle.library.model
 
 import androidx.annotation.DrawableRes
 
-data class Book(
+data class BookTitle(
     val id: Int,
     val title: String,
     val author: String,

@@ -1,6 +1,6 @@
 package com.jogurtonelle.library.model
 
-enum class BookStatus {
+enum class BookStatus{
     AVAILABLE,
     BORROWED
 }

@@ -1,4 +1,4 @@
-package com.jogurtonelle.library.ui.barcodeScreen
+package com.jogurtonelle.library.ui.qrCodeSheet
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -16,11 +16,11 @@ import androidx.compose.ui.unit.dp
 import com.jogurtonelle.library.R
 
 @Composable
-fun FloatingActionButtonCard(
-    onYourCardClick: () -> Unit
+fun QrCodeFloatingActionButton(
+    onButtonClick: () -> Unit
 ) {
     Button(
-        onClick = onYourCardClick,
+        onClick = onButtonClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
