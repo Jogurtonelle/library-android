@@ -1,6 +1,5 @@
 package com.jogurtonelle.library.ui.book
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.jogurtonelle.library.data.Data
 import com.jogurtonelle.library.theme.Oswald
 
@@ -39,9 +38,10 @@ fun BookScreen(
             contentPadding = paddingValues,
         ){
             item{
-                Image(
-                    painter = painterResource(id = book.coverId),
-                    contentDescription = book.title,
+
+                AsyncImage(
+                    model = book.coverURL,
+                    contentDescription = null,
                     modifier = modifier
                         .padding(top = 16.dp, bottom = 16.dp)
                         .clip(shape = RoundedCornerShape(16.dp))

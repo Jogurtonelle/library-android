@@ -30,7 +30,7 @@ fun LibraryApp(
                 librarySearchBarValue = libraryViewModel._searchQuery,
                 onBookClicked = {
                     libraryViewModel.selectBook(it)
-                    libraryViewModel.onQueryChanged("")
+                    //libraryViewModel.onQueryChanged("")
                     navController.navigate(LibraryScreen.BOOK.name)
                 },
                 onBarcodeDismissRequest = { libraryViewModel.changeBarcodeSheetVisibility(false) },

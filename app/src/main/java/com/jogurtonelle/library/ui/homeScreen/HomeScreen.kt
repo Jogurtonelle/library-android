@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.jogurtonelle.library.data.Data
 import com.jogurtonelle.library.ui.qrCodeSheet.QrCodeBottomSheet
 import com.jogurtonelle.library.ui.qrCodeSheet.QrCodeFloatingActionButton
-import com.jogurtonelle.library.ui.topBar.LibrarySearchBar
+import com.jogurtonelle.library.ui.searchBar.LibrarySearchBar
 import com.jogurtonelle.library.ui.viewModel.LibraryUiState
 
 @Composable
@@ -38,7 +38,10 @@ fun HomeScreen(
                 isActive = searchBarFocused,
                 onActiveChange = onSearchBarFocusChange,
                 onOpenMenu = {}, //TODO
-                prevSearches = prevSearches
+                prevSearches = prevSearches,
+                searchResults = libraryUiState.searchResults,
+                ifShowResults = libraryUiState.showSearchResults,
+                onBookClick = onBookClicked
             )
         },
         modifier = Modifier.fillMaxSize(),

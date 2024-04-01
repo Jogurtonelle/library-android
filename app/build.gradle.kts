@@ -72,4 +72,7 @@ dependencies {
 
     //Barcodes
     implementation(libs.compose.qr.code)
+
+    // Coil
+    implementation(libs.coil.compose)
 }

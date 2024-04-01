@@ -1,6 +1,5 @@
 package com.jogurtonelle.library.ui.homeScreen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.jogurtonelle.library.R
 import com.jogurtonelle.library.model.BookTitle
 import com.jogurtonelle.library.theme.LibraryTheme
 
@@ -33,8 +34,8 @@ fun BookCard(
 ){
     Card (
         modifier = modifier
-            .widthIn(max = 176.dp, min = 176.dp)
-            .heightIn(min = 332.dp, max = 332.dp)
+            .widthIn(max = 146.dp, min = 146.dp)
+            .heightIn(min = 292.dp, max = 292.dp)
             .clickable(
                 enabled = true,
                 onClick = onCardClicked,
@@ -51,14 +52,16 @@ fun BookCard(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ){
-            Image(
-                painter = painterResource(id = book.coverId),
-                contentDescription = book.title,
+            AsyncImage(
+                model = book.coverURL,
+                contentDescription = null,
+                placeholder = painterResource(id = R.drawable.loading_img),
                 modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .width(160.dp)
-                    .clip(shape = RoundedCornerShape(16.dp))
+                        .padding(bottom = 16.dp)
+                        .width(160.dp)
+                        .clip(shape = RoundedCornerShape(16.dp))
             )
+
             Text(
                 text = book.title,
                 style = MaterialTheme.typography.bodyLarge,
