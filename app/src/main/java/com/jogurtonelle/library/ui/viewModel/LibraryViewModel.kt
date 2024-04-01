@@ -31,8 +31,13 @@ class LibraryViewModel : ViewModel() {
 
         if (query.isNotEmpty()){
             //New search results contain the previous search results
-            if (_prevSearchQuerry.isNotEmpty() && _prevSearchQuerry.length < 15 && _prevSearchQuerry.length < query.length && query.contains(_prevSearchQuerry)){
+            if (_prevSearchQuerry.isNotEmpty() && _prevSearchResults.size < 15 && query.contains(_prevSearchQuerry)){
                 searchResults = _prevSearchResults.filter { it.title.contains(query, ignoreCase = true) }.take(15)
+
+                //Searching for author
+                if (searchResults.isEmpty() || searchResults.size < 15){
+                    searchResults = searchResults + _prevSearchResults.filter { it.author.contains(query, ignoreCase = true) && !searchResults.contains(it)}.take(15 - searchResults.size)
+                }
             }
             else{
                 searchResults = Data.bookTitles.filter { it.title.startsWith(query, ignoreCase = true) }.take(15)
@@ -43,16 +48,10 @@ class LibraryViewModel : ViewModel() {
                 if (searchResults.isEmpty() || searchResults.size < 15){
                     searchResults = searchResults + Data.bookTitles.filter { it.author.contains(query, ignoreCase = true) && !searchResults.contains(it)}.take(15 - searchResults.size)
                 }
+            }
 
-                //Searching for ISBN
-                if (searchResults.isEmpty() && query.length > 2) {
-                    searchResults = searchResults + Data.bookTitles.filter {
-                        it.ISBN.startsWith(
-                            query,
-                            ignoreCase = true
-                        )
-                    }.take(15)
-                }
+            if (searchResults.isEmpty() && query.all{ it.isDigit() }){
+                searchResults = Data.bookTitles.filter { it.ISBN.startsWith(query) }
             }
 
             _uiState.update {
