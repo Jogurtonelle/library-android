@@ -26,7 +26,8 @@ fun HomeScreen(
     onBarcodeDismissRequest: () -> Unit,
     onYourCardClick: () -> Unit,
     onSearchBarFocusChange: (Boolean) -> Unit,
-    prevSearches: List<String>
+    prevSearches: List<String>,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
         floatingActionButton = { QrCodeFloatingActionButton(onButtonClick = onYourCardClick) },
@@ -37,14 +38,14 @@ fun HomeScreen(
                 onSearch = {}, //TODO
                 isActive = searchBarFocused,
                 onActiveChange = onSearchBarFocusChange,
-                onOpenMenu = {}, //TODO
                 prevSearches = prevSearches,
                 searchResults = libraryUiState.searchResults,
                 ifShowResults = libraryUiState.showSearchResults,
                 onBookClick = onBookClicked
             )
         },
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize(),
     ) {
         innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -56,12 +57,7 @@ fun HomeScreen(
                         modifier = Modifier.padding(16.dp),
                         color = MaterialTheme.colorScheme.onSurface
                     )
-
-
                 }
-                //item{
-                //    LibraryTextField(onValueChange = onLibraryTextFieldValueChange, value = libraryTextFieldValue)
-                //}
 
                 item{
                     BookCarousel(books = Data.bookTitles, title = "Nowości", onBookClick = onBookClicked)

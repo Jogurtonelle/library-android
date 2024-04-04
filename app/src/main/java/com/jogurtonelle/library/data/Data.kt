@@ -166,4 +166,6 @@ object Data{
         email = "",
         password = ""
     )
+
+    val favourites = mutableListOf<BookTitle>(bookTitles[0], bookTitles[1], bookTitles[2])
 }

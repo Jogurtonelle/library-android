@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.jogurtonelle.library.data.Data
 import com.jogurtonelle.library.model.BookTitle
+import com.jogurtonelle.library.ui.LibraryScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -72,12 +73,12 @@ class LibraryViewModel : ViewModel() {
     }
 
     //Book selection
-    fun selectBook(bookId: Int) {
-        _uiState.value.selectedBookTitleId = bookId
+    fun selectBookHomeScreen(bookId: Int) {
+        _uiState.value.selectedBookTitleIdHomeScreen = bookId
     }
 
-    fun resetSelectedBook() {
-        _uiState.value.selectedBookTitleId = null
+    fun selectBookFavouritesScreen(bookId: Int) {
+        _uiState.value.selectedBookTitleIdFavouritesScreen = bookId
     }
 
     fun changeBarcodeSheetVisibility(isVisible: Boolean) {
@@ -95,6 +96,67 @@ class LibraryViewModel : ViewModel() {
     fun addPrevSearch(search: String) {
         _uiState.update {
             it.copy(prevSearches = it.prevSearches + search)
+        }
+    }
+
+    fun setCurrentScreen(screen: LibraryScreen){
+        if (screen == LibraryScreen.BOOK_HOME) {
+            _uiState.update {
+                it.copy(
+                    currentScreen = screen,
+                    bookScreenMainActive = true
+                )
+            }
+            return
+        }
+
+        if (screen == LibraryScreen.BOOK_FAV) {
+            _uiState.update {
+                it.copy(
+                    currentScreen = screen,
+                    bookScreenFavActive = true
+                )
+            }
+            return
+        }
+
+        if (screen == LibraryScreen.HOME && _uiState.value.bookScreenMainActive) {
+            _uiState.update {
+                it.copy(
+                    currentScreen = screen,
+                    bookScreenMainActive = false
+                )
+            }
+            onSearchBarFocusChange(false)
+            onQueryChanged("")
+            return
+        }
+
+        if (screen == LibraryScreen.FAV && _uiState.value.bookScreenFavActive) {
+            _uiState.update {
+                it.copy(
+                    currentScreen = screen,
+                    bookScreenFavActive = false
+                )
+            }
+            return
+        }
+
+        _uiState.update {
+            it.copy(
+                currentScreen = screen
+            )
+        }
+    }
+
+    fun editFavourites(bookId: Int){
+        val book = Data.bookTitles.find { it.id == bookId }
+        if (book != null && !Data.favourites.contains(book)){
+            Data.favourites.add(book)
+            return
+        }
+        if (book != null && Data.favourites.contains(book)){
+            Data.favourites.remove(book)
         }
     }
 }

@@ -55,7 +55,7 @@ fun BookCard(
             AsyncImage(
                 model = book.coverURL,
                 contentDescription = null,
-                placeholder = painterResource(id = R.drawable.loading_img),
+                placeholder = painterResource(id = R.drawable.baseline_image_24),
                 modifier = Modifier
                         .padding(bottom = 16.dp)
                         .width(160.dp)

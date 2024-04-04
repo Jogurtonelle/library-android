@@ -42,10 +42,10 @@ fun LibrarySearchBar(
     onSearch : (String) -> Unit,
     isActive: Boolean,
     onActiveChange : (Boolean) -> Unit,
-    onOpenMenu: () -> Unit,
     prevSearches: List<String>,
     searchResults: List<BookTitle>,
     onBookClick: (Int) -> Unit,
+    onOpenMenu: () -> Unit ={},
     modifier: Modifier = Modifier
 ) {
     val horizontalPadding by animateDpAsState(targetValue = if (isActive) 0.dp else 16.dp,
