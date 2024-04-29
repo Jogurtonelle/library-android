@@ -16,7 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,7 +44,7 @@ fun LibrarySearchBar(
     onActiveChange : (Boolean) -> Unit,
     prevSearches: List<String>,
     searchResults: List<BookTitle>,
-    onBookClick: (Int) -> Unit,
+    onBookClick: (BookTitle) -> Unit,
     onOpenMenu: () -> Unit ={},
     modifier: Modifier = Modifier
 ) {
@@ -66,19 +66,29 @@ fun LibrarySearchBar(
         onActiveChange = {onActiveChange(it)},
         placeholder = { Text(text = "Wyszukaj tytuł, autora lub numer ISBN") },
         leadingIcon = {
-            IconButton(
-                onClick = { if (isActive) onActiveChange(false) else onOpenMenu() },
-                modifier = Modifier
-                    .padding(start = 0.dp, end = 0.dp)
-            ) {
+            if (isActive){
+                IconButton(
+                    onClick = { onActiveChange(false) },
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        modifier = Modifier
+                            .size(24.dp),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            }
+            else{
                 Icon(
-                    imageVector = if (isActive) Icons.AutoMirrored.Filled.ArrowBack else Icons.Filled.Menu,
-                    contentDescription = if (isActive) "Back" else "Menu",
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null,
                     modifier = Modifier
                         .size(24.dp),
                     tint = MaterialTheme.colorScheme.onSurface
                 )
             }
+
         },
         colors = SearchBarDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surface

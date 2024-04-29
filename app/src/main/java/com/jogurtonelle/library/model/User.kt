@@ -1,8 +1,9 @@
 package com.jogurtonelle.library.model
 
 data class User(
-    val id: Long,
-    val name: String,
-    val email: String,
-    val password: String
+    val uid: String = "1234",
+    val cardID: String = "1234",
+    val favourites: MutableList<BookTitle> = mutableListOf(),
+    val notifications: MutableList<Notification> = mutableListOf(),
+    val borrowedBooks: MutableList<BookTitle> = mutableListOf()
 )

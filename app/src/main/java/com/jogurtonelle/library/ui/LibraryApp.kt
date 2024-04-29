@@ -1,6 +1,7 @@
 package com.jogurtonelle.library.ui
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +17,10 @@ import com.jogurtonelle.library.ui.book.BookScreen
 import com.jogurtonelle.library.ui.common.BottomNavBar
 import com.jogurtonelle.library.ui.favourites.FavouritesScreen
 import com.jogurtonelle.library.ui.homeScreen.HomeScreen
+import com.jogurtonelle.library.ui.login.LoginScreen
+import com.jogurtonelle.library.ui.notifications.NotificationsScreen
 import com.jogurtonelle.library.ui.viewModel.LibraryViewModel
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun LibraryApp(
@@ -64,7 +68,7 @@ fun LibraryApp(
         paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = LibraryScreen.HOME.name
+            startDestination = libraryUiState.currentScreen.name
         ) {
             composable(LibraryScreen.HOME.name) {
                 HomeScreen(
@@ -81,22 +85,27 @@ fun LibraryApp(
                     onSearchBarFocusChange = { libraryViewModel.onSearchBarFocusChange(it) },
                     searchBarFocused = libraryViewModel._searchBarFocused,
                     prevSearches = libraryUiState.prevSearches,
+                    promotionRows = libraryViewModel._promotionRows,
+                    cardID = libraryViewModel.user.cardID,
                     modifier = Modifier.padding(paddingValues)
                 )
             }
 
             composable(LibraryScreen.BOOK_HOME.name) {
                 BookScreen(
-                    bookTitleId = libraryUiState.selectedBookTitleIdHomeScreen,
+                    bookTitle = libraryUiState.selectedBookTitleHomeScreen,
+                    getBookCopies = { runBlocking { libraryViewModel.getBookCopies(it) } },
                     onBack = { navController.popBackStack() },
+                    onAddToFavourites = { libraryViewModel.editFavourites(it) },
+                    user = libraryViewModel.user,
                     modifier = Modifier.padding(paddingValues),
-                    onAddToFavourites = { libraryViewModel.editFavourites(it) }
                 )
             }
 
             composable(LibraryScreen.FAV.name) {
                 FavouritesScreen(
                     modifier = Modifier.padding(paddingValues),
+                    favourites = libraryViewModel.user.favourites,
                     onCardClick = {
                         libraryViewModel.selectBookFavouritesScreen(it)
                         libraryViewModel.setCurrentScreen(LibraryScreen.BOOK_FAV)
@@ -107,33 +116,36 @@ fun LibraryApp(
 
             composable(LibraryScreen.BOOK_FAV.name) {
                 BookScreen(
-                    bookTitleId = libraryUiState.selectedBookTitleIdFavouritesScreen,
+                    bookTitle = libraryUiState.selectedBookTitleFavouritesScreen,
+                    getBookCopies = { runBlocking { libraryViewModel.getBookCopies(it) } },
                     onBack = { navController.popBackStack() },
+                    user = libraryViewModel.user,
+                    onAddToFavourites = { libraryViewModel.editFavourites(it) },
                     modifier = Modifier.padding(paddingValues),
-                    onAddToFavourites = { libraryViewModel.editFavourites(it) }
                 )
             }
 
             composable(LibraryScreen.NOTIFICATIONS.name) {
-                Text(
-                    text = "Powiadomienia",
+                NotificationsScreen(
                     modifier = Modifier.padding(paddingValues)
                 )
             }
 
             composable(LibraryScreen.PROFILE.name) {
-                Text(
-                    text = "Profil",
-                    modifier = Modifier.padding(paddingValues)
-                )
+                Button(onClick = { libraryViewModel.logout() }) {
+                     Text("Logout")
+                }
+            }
+
+            composable(LibraryScreen.LOGIN.name) {
+                LoginScreen(onLoginClick = { email, password ->
+                    libraryViewModel.login(email, password)
+                })
             }
         }
     }
-
-
-
 }
 
 enum class LibraryScreen{
-    HOME, BOOK_HOME, FAV, BOOK_FAV, NOTIFICATIONS, PROFILE
+    HOME, BOOK_HOME, FAV, BOOK_FAV, NOTIFICATIONS, PROFILE, LOGIN
 }

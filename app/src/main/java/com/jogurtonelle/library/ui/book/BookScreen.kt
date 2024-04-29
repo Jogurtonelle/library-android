@@ -27,21 +27,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.jogurtonelle.library.R
-import com.jogurtonelle.library.data.Data
+import com.jogurtonelle.library.model.BookCopy
+import com.jogurtonelle.library.model.BookTitle
+import com.jogurtonelle.library.model.User
 import com.jogurtonelle.library.theme.Oswald
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun BookScreen(
-    bookTitleId : Int,
+    bookTitle: BookTitle,
+    getBookCopies: (String) -> List<BookCopy>,
     onBack: () -> Unit,
-    onAddToFavourites: (Int) -> Unit,
+    onAddToFavourites: (String) -> Unit,
+    user : User,
     modifier: Modifier = Modifier
 ){
-    val book = Data.bookTitles.first { it.id == bookTitleId }
-    val availableCopies = Data.bookItems.filter { it.bookTitleId == book.id }.sortedBy { it.libraryBranchId }
+    val availableCopies = getBookCopies(bookTitle.isbn)
     val libraryBranches = availableCopies.map { it.libraryBranchId }.distinct().sorted()
-    var isFavourite by mutableStateOf(Data.favourites.contains(book))
+    var isFavourite by mutableStateOf(user.favourites.map(BookTitle::isbn).contains(bookTitle.isbn))
 
     Scaffold (
         containerColor = MaterialTheme.colorScheme.surface,
@@ -69,7 +72,7 @@ fun BookScreen(
                     }
 
                     AsyncImage(
-                        model = book.coverURL,
+                        model = bookTitle.coverURL,
                         contentDescription = null,
                         modifier = Modifier
                             .padding(top = 24.dp, bottom = 16.dp)
@@ -78,7 +81,7 @@ fun BookScreen(
                     )
 
                     IconButton(onClick = {
-                        onAddToFavourites(bookTitleId)
+                        onAddToFavourites(bookTitle.isbn)
                         isFavourite = !isFavourite },
                         modifier = Modifier.padding(8.dp)
                     ) {
@@ -91,7 +94,7 @@ fun BookScreen(
             }
 
             item {
-                TitleAndDescription(book = book)
+                TitleAndDescription(book = bookTitle)
             }
 
             item{

@@ -18,23 +18,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.jogurtonelle.library.data.Data
 import com.jogurtonelle.library.model.BookTitle
 
 @Composable
 fun SearchResult(
     book: BookTitle,
-    onCardClick : (Int) -> Unit,
+    onCardClick : (BookTitle) -> Unit,
     modifier: Modifier = Modifier
 ){
     Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable(
-                onClick = { onCardClick(book.id) }
+                onClick = { onCardClick(book) }
             ),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
@@ -78,11 +76,11 @@ fun SearchResult(
     }
 }
 
-@Preview
-@Composable
-fun SearchResultPreview(){
-    SearchResult(
-        book = Data.bookTitles.first(),
-        onCardClick = {}
-    )
-}
+//@Preview
+//@Composable
+//fun SearchResultPreview(){
+//    SearchResult(
+//        book = Data.bookTitles.first(),
+//        onCardClick = {}
+//    )
+//}

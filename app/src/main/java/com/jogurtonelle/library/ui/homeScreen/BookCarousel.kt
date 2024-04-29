@@ -18,7 +18,7 @@ import com.jogurtonelle.library.theme.Oswald
 fun BookCarousel(
     books: List<BookTitle>,
     title: String,
-    onBookClick: (Int) -> Unit,
+    onBookClick: (BookTitle) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -39,7 +39,7 @@ fun BookCarousel(
             items(books) { book ->
                 BookCard(
                     book = book,
-                    onCardClicked = { onBookClick(book.id) }
+                    onCardClicked = { onBookClick(book) }
                 )
             }
         }

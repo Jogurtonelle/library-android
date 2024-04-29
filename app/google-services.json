@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "381319992245",
+    "project_id": "library-project-uj-2021-2024",
+    "storage_bucket": "library-project-uj-2021-2024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381319992245:android:0b42c7d662a688643e3ffc",
+        "android_client_info": {
+          "package_name": "com.jogurtonelle.library"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5S1BjLYMljsQskUnCglNulHZPWaJQqWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

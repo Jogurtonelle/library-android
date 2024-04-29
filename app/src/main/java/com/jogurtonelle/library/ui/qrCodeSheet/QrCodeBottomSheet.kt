@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jogurtonelle.library.data.Data
 import com.jogurtonelle.library.theme.Oswald
 import com.lightspark.composeqr.QrCodeColors
 import com.lightspark.composeqr.QrCodeView
@@ -24,6 +23,7 @@ import com.lightspark.composeqr.QrCodeView
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QrCodeBottomSheet(
+    cardID : String,
     onDismissRequest: () -> Unit,
 ) {
     ModalBottomSheet(
@@ -39,7 +39,7 @@ fun QrCodeBottomSheet(
                     fontSize = 32.sp
                 )
                 QrCodeView(
-                    data = Data.user.id.toString(),
+                    data = cardID,
                     modifier = Modifier
                         .padding(start = 72.dp, end = 72.dp, top = 16.dp, bottom = 8.dp)
                         .fillMaxWidth()
@@ -50,7 +50,7 @@ fun QrCodeBottomSheet(
                     )
                 )
                 Text(
-                    text = Data.user.id.toString(),
+                    text = cardID,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier

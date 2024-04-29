@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -75,4 +76,10 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-auth")
+
 }

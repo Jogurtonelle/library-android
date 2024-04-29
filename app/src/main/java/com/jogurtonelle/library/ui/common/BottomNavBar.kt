@@ -1,5 +1,7 @@
 package com.jogurtonelle.library.ui.common
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -7,10 +9,12 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.jogurtonelle.library.R
+import com.jogurtonelle.library.data.Data
 import com.jogurtonelle.library.ui.LibraryScreen
 
 @Composable
@@ -62,10 +66,17 @@ fun BottomNavBar(
             selected = (currentSelection == LibraryScreen.NOTIFICATIONS),
             onClick =  {onClick(LibraryScreen.NOTIFICATIONS)},
             icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_notifications_24),
-                    contentDescription = "Powiadomienia"
-                )
+                Box{
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_notifications_24),
+                        contentDescription = "Powiadomienia"
+                    )
+                    if (Data.notifications.isNotEmpty()){
+                        Badge(
+                            modifier = Modifier.align(Alignment.TopEnd)
+                        )
+                    }
+                }
             },
             colors = navigationBarItemColors,
             label = { Text(text = "Powiadomienia", maxLines = 1, overflow = TextOverflow.Ellipsis) }
