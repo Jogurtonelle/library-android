@@ -1,5 +1,6 @@
 package com.jogurtonelle.library.ui.book
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,6 +17,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,11 +28,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jogurtonelle.library.model.BookCopy
 import com.jogurtonelle.library.model.BookStatus
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun AvailableBookCopies(
     availableCopies: List<BookCopy>,
-    branch: Int
+    branch: Int,
+    onReserveBook: (BookCopy) -> Unit
 ) {
     val branchName = if (branch == 0)  "Biblioteka główna" else "Filia nr $branch"
     val availableCopiesInBranch = availableCopies.filter { it.libraryBranchId == branch }
@@ -52,7 +60,7 @@ fun AvailableBookCopies(
     }
 
     for (copy in availableCopiesInBranch) {
-        val isAvailable = (copy.status == BookStatus.AVAILABLE)
+        var isAvailable by mutableStateOf(copy.status == BookStatus.AVAILABLE)
 
         Card(
             modifier = Modifier
@@ -127,7 +135,12 @@ fun AvailableBookCopies(
                 }
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        onReserveBook(copy)
+                        isAvailable = false
+                        copy.dateOfReturn = LocalDate.now().plusMonths(1)
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+                    },
                     modifier = Modifier
                         .fillMaxHeight()
                         .padding(end = 12.dp),

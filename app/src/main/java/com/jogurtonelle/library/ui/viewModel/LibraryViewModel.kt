@@ -11,6 +11,8 @@ import com.google.firebase.firestore.firestore
 import com.jogurtonelle.library.model.BookCopy
 import com.jogurtonelle.library.model.BookStatus
 import com.jogurtonelle.library.model.BookTitle
+import com.jogurtonelle.library.model.Notification
+import com.jogurtonelle.library.model.NotificationType
 import com.jogurtonelle.library.model.PromotionRow
 import com.jogurtonelle.library.model.User
 import com.jogurtonelle.library.ui.LibraryScreen
@@ -19,6 +21,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class LibraryViewModel : ViewModel(){
     //UI State
@@ -74,12 +78,14 @@ class LibraryViewModel : ViewModel(){
                 runBlocking {
                     //Searching for title
                     if (searchResults.isEmpty()){
-                        searchResults = db.collection("BookTitles").whereGreaterThanOrEqualTo("title", query).limit(15).get().await().toObjects(BookTitle::class.java)
+                        searchResults = db.collection("BookTitles").whereGreaterThanOrEqualTo("title", query).whereLessThanOrEqualTo("title", query + "\uf8ff").limit(15).get().await().toObjects(BookTitle::class.java)
                     }
 
                     //Searching for author
                     if (searchResults.isEmpty() || searchResults.size < 15){
-                        searchResults = searchResults + db.collection("BookTitles").whereGreaterThanOrEqualTo("author", query).limit(15L - searchResults.size).get().await().toObjects(BookTitle::class.java)
+                        searchResults = searchResults + db.collection("BookTitles").whereGreaterThanOrEqualTo("author", query).whereLessThanOrEqualTo("author", query + "\uf8ff").limit(
+                            (15 - searchResults.size).toLong()
+                        ).get().await().toObjects(BookTitle::class.java)
                     }
                 }
 
@@ -284,6 +290,11 @@ class LibraryViewModel : ViewModel(){
         }
     }
 
+    private suspend fun getNotification(id: String): Notification{
+        val document = db.collection("Notifications").document(id).get().await()
+        return document.toObject(Notification::class.java)!!
+    }
+
     /** Get user data from the database. Function sets ViewModel parameter user and UIState parameter currentScreen to proper values*/
     private fun getUserData(){
         _uiState.update {
@@ -311,10 +322,18 @@ class LibraryViewModel : ViewModel(){
                             }
                         }
 
+                        val notificationsListRaw = document.data!!["notifications"] as List<String>
+                        val notificationsList = mutableListOf<Notification>()
+
+                        for (notification in notificationsListRaw){
+                            runBlocking { notificationsList.add(getNotification(notification)) }
+                        }
+
                         user = User(
                             uid = document.data!!["uid"] as String,
                             cardID = document.data!!["cardID"] as String,
-                            favourites = booksList
+                            favourites = booksList,
+                            notifications = notificationsList
                         )
                     }
                 }.await()
@@ -331,6 +350,44 @@ class LibraryViewModel : ViewModel(){
     fun logout(){
         auth.signOut()
         getUserData()
+    }
+
+    fun reserveBook(bookCopy: BookCopy){
+        runBlocking {
+            db.collection("BookCopies").document(bookCopy.id.toString()).get()
+                .addOnSuccessListener { document ->
+                    if (document.data != null) {
+                        if (document.data!!["status"] as String == "AVAILABLE") {
+                            bookCopy.status = BookStatus.BORROWED
+                            val dateOfReturn = LocalDate.now().plusMonths(1)
+                                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                            bookCopy.dateOfReturn = dateOfReturn.toString()
+                            val notification = Notification(
+                                id = bookCopy.id.toString(),
+                                type = NotificationType.ORDER_IN_PROGRESS,
+                                book = runBlocking { getBookTitle(bookCopy.bookTitleISBN) },
+                                branchID = bookCopy.libraryBranchId,
+                                dateOfReturn = dateOfReturn
+                            )
+                            Thread {
+                                db.collection("BookCopies").document(bookCopy.id.toString())
+                                    .update("status", "BORROWED")
+                                db.collection("BookCopies").document(bookCopy.id.toString())
+                                    .update("dateOfReturn", dateOfReturn.toString())
+                                user.notifications.add(notification)
+                                db.collection("Notifications").document(bookCopy.id.toString())
+                                    .set(notification)
+                                db.collection("Users").document(auth.currentUser!!.uid)
+                                    .update("notifications", user.notifications.map { it.id })
+                            }.start()
+                        }
+                    }
+                }.await()
+        }
+    }
+
+    fun getNotifications(): List<Notification> {
+        return user.notifications
     }
 
     init{

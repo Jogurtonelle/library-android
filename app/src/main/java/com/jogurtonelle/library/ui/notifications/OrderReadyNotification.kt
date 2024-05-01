@@ -83,38 +83,38 @@ fun OrderReadyNotification(
             if (showDetails){
                 Column {
                     Text(
-                        text = "Zamówione książki:",
+                        text = "Zamówiona książka:",
                         modifier = Modifier.padding(top = 16.dp),
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                     )
 
-                    for (book in notification.books){
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(top = 8.dp, start = 4.dp)
+                    val book = notification.book
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(top = 8.dp, start = 4.dp)
+                    ){
+                        AsyncImage(
+                            model = book.coverURL,
+                            contentDescription = null,
+                            placeholder = painterResource(id = R.drawable.baseline_image_24),
+                            modifier = Modifier
+                                .width(56.dp)
+                                .clip(shape = RoundedCornerShape(12.dp))
+                        )
+                        Column (
+                            modifier = Modifier.padding(start = 8.dp)
                         ){
-                            AsyncImage(
-                                model = book.coverURL,
-                                contentDescription = null,
-                                placeholder = painterResource(id = R.drawable.baseline_image_24),
-                                modifier = Modifier
-                                    .width(56.dp)
-                                    .clip(shape = RoundedCornerShape(12.dp))
+                            Text(
+                                text = book.title,
+                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
                             )
-                            Column (
-                                modifier = Modifier.padding(start = 8.dp)
-                            ){
-                                Text(
-                                    text = book.title,
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
-                                )
-                                Text(
-                                    text = book.author,
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                            }
+                            Text(
+                                text = book.author,
+                                style = MaterialTheme.typography.bodySmall
+                            )
                         }
                     }
+
                 }
             }
         }

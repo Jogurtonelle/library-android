@@ -59,7 +59,7 @@ fun ReturnDateNotification(
                         .weight(1f)
                 ){
                     Text(
-                        text = "Zbliza się data zwrotu ${notification.books.size} książek",
+                        text = "Zbliza się data zwrotu książki",
                         modifier = Modifier.padding(bottom = 4.dp),
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                     )
@@ -83,33 +83,34 @@ fun ReturnDateNotification(
                         style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                     )
 
-                    for (book in notification.books){
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(top = 8.dp, start = 4.dp)
+                    val book = notification.book
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(top = 8.dp, start = 4.dp)
+                    ){
+                        AsyncImage(
+                            model = book.coverURL,
+                            contentDescription = null,
+                            placeholder = painterResource(id = R.drawable.baseline_image_24),
+                            modifier = Modifier
+                                .width(56.dp)
+                                .clip(shape = RoundedCornerShape(12.dp))
+                        )
+                        Column (
+                            modifier = Modifier.padding(start = 8.dp)
                         ){
-                            AsyncImage(
-                                model = book.coverURL,
-                                contentDescription = null,
-                                placeholder = painterResource(id = R.drawable.baseline_image_24),
-                                modifier = Modifier
-                                    .width(56.dp)
-                                    .clip(shape = RoundedCornerShape(12.dp))
+                            Text(
+                                text = book.title,
+                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
                             )
-                            Column (
-                                modifier = Modifier.padding(start = 8.dp)
-                            ){
-                                Text(
-                                    text = book.title,
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
-                                )
-                                Text(
-                                    text = book.author,
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                            }
+                            Text(
+                                text = book.author,
+                                style = MaterialTheme.typography.bodySmall
+                            )
                         }
                     }
+
                 }
             }
         }

@@ -61,6 +61,7 @@ fun LibraryApp(
                     libraryViewModel.setCurrentScreen(it)
                     navController.navigate(it.name)
                 },
+                isNotificationListEmpty = { libraryViewModel.getNotifications().isEmpty() },
                 currentSelection = libraryUiState.currentScreen
             )
         }
@@ -98,6 +99,7 @@ fun LibraryApp(
                     onBack = { navController.popBackStack() },
                     onAddToFavourites = { libraryViewModel.editFavourites(it) },
                     user = libraryViewModel.user,
+                    onReserve = {libraryViewModel.reserveBook(it)},
                     modifier = Modifier.padding(paddingValues),
                 )
             }
@@ -121,12 +123,14 @@ fun LibraryApp(
                     onBack = { navController.popBackStack() },
                     user = libraryViewModel.user,
                     onAddToFavourites = { libraryViewModel.editFavourites(it) },
+                    onReserve = { libraryViewModel.reserveBook(it) },
                     modifier = Modifier.padding(paddingValues),
                 )
             }
 
             composable(LibraryScreen.NOTIFICATIONS.name) {
                 NotificationsScreen(
+                    getNotifications = { libraryViewModel.getNotifications() },
                     modifier = Modifier.padding(paddingValues)
                 )
             }

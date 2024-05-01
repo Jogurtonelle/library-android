@@ -5,6 +5,6 @@ data class BookCopy(
     val bookTitleISBN: String,
     val libraryBranchId: Int,
     val yearOfPublication: Int,
-    val status: BookStatus,
-    val dateOfReturn: String?
+    var status: BookStatus,
+    var dateOfReturn: String?
 )

@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.jogurtonelle.library.R
-import com.jogurtonelle.library.data.Data
 import com.jogurtonelle.library.ui.LibraryScreen
 
 @Composable
 fun BottomNavBar(
+    isNotificationListEmpty: () -> Boolean,
     onClick: (LibraryScreen) -> Unit,
     currentSelection: LibraryScreen,
     modifier: Modifier = Modifier
@@ -71,7 +71,7 @@ fun BottomNavBar(
                         painter = painterResource(id = R.drawable.baseline_notifications_24),
                         contentDescription = "Powiadomienia"
                     )
-                    if (Data.notifications.isNotEmpty()){
+                    if (isNotificationListEmpty().not()){
                         Badge(
                             modifier = Modifier.align(Alignment.TopEnd)
                         )

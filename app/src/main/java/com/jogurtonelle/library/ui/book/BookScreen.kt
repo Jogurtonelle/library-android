@@ -40,6 +40,7 @@ fun BookScreen(
     onBack: () -> Unit,
     onAddToFavourites: (String) -> Unit,
     user : User,
+    onReserve: (BookCopy) -> Unit,
     modifier: Modifier = Modifier
 ){
     val availableCopies = getBookCopies(bookTitle.isbn)
@@ -112,7 +113,7 @@ fun BookScreen(
             }
 
             items(libraryBranches) { branch ->
-                AvailableBookCopies(availableCopies = availableCopies, branch = branch)
+                AvailableBookCopies(availableCopies = availableCopies, branch = branch, onReserveBook = onReserve)
                 Spacer(modifier = Modifier.padding(4.dp))
             }
         }

@@ -7,15 +7,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jogurtonelle.library.data.Data
+import com.jogurtonelle.library.model.Notification
 import com.jogurtonelle.library.model.NotificationType
 
 
 @Composable
 fun NotificationsScreen(
+    getNotifications: () -> List<Notification>,
     modifier: Modifier = Modifier
 ){
-    val data = Data.notifications
+    val data = getNotifications()
 
     LazyColumn (
         modifier = modifier,

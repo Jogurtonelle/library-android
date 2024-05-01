@@ -1,10 +1,10 @@
 package com.jogurtonelle.library.model
 
 data class Notification(
-    val type: NotificationType,
-    val books: List<BookTitle>,
-    //val dateOfRecieving: String,
-    val branchID: Int,
+    val id: String = "1",
+    val type: NotificationType = NotificationType.ORDER_IN_PROGRESS,
+    val book: BookTitle = BookTitle(),
+    val branchID: Int = 0,
     val dateOfReturn: String? = null
 )
 
